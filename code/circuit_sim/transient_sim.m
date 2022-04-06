@@ -51,5 +51,14 @@ function [] = sim(num_steps,dt,G,C,V_in)
     xlabel('Voltage (V)')
     ylabel('Time (s)')
     subplot(1,2,2); 
+    %omega=-pi:2*pi/num_steps:pi-2*pi/num_steps;
+    omega=linspace(0.5*-1/dt,0.5*1/dt,num_steps);
+    hold on;
+    plot(omega,20*log10(abs(fftshift(fft(V_in)))));
+    plot(omega,20*log10(abs(fftshift(fft(V_out)))));    
+    title('Gain vs. Frequency');
+    legend('Vin','Vo');
+    xlabel('freq (Hz)')
+    ylabel('Gain (dB)')
 end
 
