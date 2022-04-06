@@ -3,7 +3,8 @@ close all;
 
 R1 = 1;
 R2 = 2;
-R3 = 10;
+R3 = 4.702629;
+%R3 = 10;
 R4 = 0.1;
 Ro = 1000;
 C1 = 0.25;
@@ -37,19 +38,19 @@ G(5,4)=1/R4;
 G(5,5)=-(1/R4+1/Ro);
 
 % The inductor:
-G(6,2)=-1;
-G(6,3)=1;
+G(6,2)=1;
+G(6,3)=-1;
 
 % The C-matrix represents the 1st order voltage relationships between the
 % circuit components (I think)
 C=zeros(6);
 
 %From node 2:
-C(2,1)=-C1;
-C(2,2)=C1;
+C(2,1)=C1;
+C(2,2)=-C1;
 
 %From the inductor:
-C(6,6)=L;
+C(6,6)=-L;
 
 %% DC Case
 V3 = [];
@@ -66,10 +67,13 @@ figure();
 plot(Vin,V3,'-',Vin,VO,'-');
 title('Voltage at Node vs. Input Voltage');
 legend('V3','VO');
+xlabel('Input Voltage (V)')
+ylabel('Voltage at Node(V)')
 
 %% AC Case
 F = [1,0,0,0,0,0];
-afreq = linspace(0,100,50);
+%afreq = linspace(0,10e9,1e5);
+afreq = logspace(0,3,100);
 VO = [];
 gain = [];
 for w = afreq
@@ -80,19 +84,23 @@ end
 
 figure();
 subplot(2,1,1);
-plot(afreq,VO);
+semilogx(afreq,VO);
 title('Output Voltage vs. Frequency (rads/s)');
+xlabel('Frequency (rads/s)')
+ylabel('Output Voltage(V)')
 subplot(2,1,2);
-plot(afreq,gain);
+semilogx(afreq,gain);
 title('Gain (dB) vs. Frequency (rads/s)');
+xlabel('Frequency (rads/s)')
+ylabel('Gain (dB)')
 
 %% AC Case II
 % Random changes to the capacitance
 F = [1,0,0,0,0,0];
 gain = zeros(1,500);
 for i = 1:500
-    C(2, 1) = normrnd(-C1, 0.05); 
-    C(2, 2) = normrnd(C1, 0.05);    
+    C(2, 1) = normrnd(C1, 0.05); 
+    C(2, 2) = normrnd(-C1, 0.05);    
     V=(G+j*pi*C)\F';    
     gain(i) = 20*log(V(5));
 end
@@ -100,3 +108,5 @@ end
 figure();
 histogram(real(gain))
 title('Gain (dB) for Normally Distributed Capacitance')
+xlabel('Gain (dB)')
+ylabel('# Occurrences')

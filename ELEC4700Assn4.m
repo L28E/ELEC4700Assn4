@@ -8,8 +8,8 @@ v=linspace(0.1,10,10);
 %    avg_currents(k)=coupled_sim("3B",v(k),0.2e-7);
 %end
 
-% Allow me to save you (and also me) some time
-avg_currents=[6.78587371e-09 6.25654368e-08 1.08680734e-07 1.58160602e-07 2.02856379e-07 2.56760490e-07 3.08744450e-07 3.63797926e-07 3.78306750e-07 4.18630588e-07];
+% Allow me to save you (and me) some time
+avg_currents=[0.0330    0.3191    0.5672    0.7803    1.0331    1.2361    1.4916    1.7967    1.9779    2.0885];
 
 figure();
 plot(v,avg_currents);
@@ -19,12 +19,12 @@ xlabel('Voltage (V)');
 
 disp("Done. Press any key to continue...");
 pause;
-%close all;
+close all;
 
 %% 2.
 p=polyfit(v,avg_currents,1);
 r3=1/p(1);
 
-disp(fprintf("R3: %f",r3));
+fprintf("R3: %e\n",r3);
 disp("Done. Press any key to continue...");
-pause;
+%pause;
