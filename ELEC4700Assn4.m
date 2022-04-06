@@ -1,4 +1,5 @@
 addpath('./code/bottleneck')
+addpath('./code/circuit_sim')
 
 %% 1.
 v=linspace(0.1,10,10);
@@ -27,4 +28,10 @@ r3=1/p(1);
 
 fprintf("R3: %e\n",r3);
 disp("Done. Press any key to continue...");
+pause;
+
+%% 3.
+freq_domain_sim
+disp("Done. Press any key to continue...");
 %pause;
+
