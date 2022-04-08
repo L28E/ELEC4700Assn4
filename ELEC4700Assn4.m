@@ -18,7 +18,7 @@ title('Average Current vs. Voltage');
 ylabel('Average Current (A)');
 xlabel('Voltage (V)');   
 
-disp("Done. Press any key to continue...");
+disp("Done Q1. Press any key to continue...");
 pause;
 close all;
 
@@ -27,11 +27,21 @@ p=polyfit(v,avg_currents,1);
 r3=1/p(1);
 
 fprintf("R3: %e\n",r3);
-disp("Done. Press any key to continue...");
+disp("Done Q2. Press any key to continue...");
 pause;
 
 %% 3.
 freq_domain_sim
-disp("Done. Press any key to continue...");
-%pause;
+disp("Done Q3. Press any key to continue...");
+pause;
+
+%% 4.
+transient_sim
+disp("Done Q4. Press any key to continue...");
+pause;
+
+%% 5.
+transient_sim_II
+disp("Done Q5. Press any key to continue...");
+pause;
 

@@ -7,24 +7,7 @@ duration=1; %1 second simulation
 num_steps=1000;
 dt=duration/num_steps;
 
-%% A. A step that transistions from 0 to 1 at 0.03s.
-
-V_in=zeros(1,num_steps);
-V_in(0.3/dt:end)=1;
-
-sim(num_steps,dt,G,C,V_in);
-
-%% B. A sin(2πf t) function with f = 1/(0.03) 1/s. Try a few other frequencies. Comment.
-% As expected of a lowpass filter, amplitude of the output decreases when
-% we increase the frequency.
-
-t=(1:num_steps)*dt;
-f=1/0.03;
-V_in=sin(2*pi*f*t);
-
-sim(num_steps,dt,G,C,V_in);
-
-%% C. A guassian pulse with a magnitude of 1, std dev. of 0.03s and a delay of 0.06s.
+%% Gaussian pulse
 
 t=(1:num_steps)*dt;
 sd=0.03;
@@ -36,8 +19,12 @@ sim(num_steps,dt,G,C,V_in);
 function [] = sim(num_steps,dt,G,C,V_in) 
     V_out=zeros(1,num_steps);
     V_prev=[0; 0; 0; 0; 0; 0];
+    a=100;
     for k=1:num_steps
-        F=[V_in(k); 0; 0; 0; 0; 0];
+        % I excluded the noise current in the matrix formulation, Force node 1 to V_in, node 3
+        I_n=randn()*0.001;
+        F=[V_in(k); 0; I_n; a*I_n; 0; 0];
+        
         V=(G+C/dt)\(C*V_prev/dt+F);
         V_out(k)=V(5);
         V_prev=V;
@@ -50,8 +37,8 @@ function [] = sim(num_steps,dt,G,C,V_in)
     legend('Vin','Vo');
     ylabel('Voltage (V)')
     xlabel('Time (s)')
-    subplot(1,2,2); 
-    %omega=-pi:2*pi/num_steps:pi-2*pi/num_steps;
+    
+    subplot(1,2,2);     
     omega=linspace(0.5*-1/dt,0.5*1/dt,num_steps);
     hold on;
     plot(omega,20*log10(abs(fftshift(fft(V_in)))));
